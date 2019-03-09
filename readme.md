@@ -114,7 +114,7 @@ sleep:
 5.以下再進行push順序的比較，如果照著順向的順序送入stack時，結果將會是由右至左的順序將暫存器由上至下的堆入堆疊記憶體。  
 ![](https://github.com/Kai0522/ESEmbedded_HW02/blob/master/img/pushing_stack.png)
 ![](https://github.com/Kai0522/ESEmbedded_HW02/blob/master/img/stack.png)  
-6.再將資料一次進行pop可以看到，assembler自動將push的資料順序與pop的順序對應。  
+6.再將資料一次進行pop可以看到，push的資料順序與pop的順序具有對應的關聯性，順序會相同。  
 ![](https://github.com/Kai0522/ESEmbedded_HW02/blob/master/img/poping_stack.png)
 7.最後將資料重新照順序push上stack，再逐一使用pop指令將資料取下，如下圖，可以看到最後被push的資料會最先被pop出暫存器，所以與上圖比較一次pop多個暫存器時順序為由左至右。
 ![](https://github.com/Kai0522/ESEmbedded_HW02/blob/master/img/poping_one.png)
