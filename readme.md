@@ -120,4 +120,4 @@ sleep:
 ![](https://github.com/Kai0522/ESEmbedded_HW02/blob/master/img/poping_one.png)
 ## 3. 結果與討論
 1.無法將暫存器以反向順序送入stack，Assembler會自動調整順序，並由右至左進行push。  
-2.堆疊記憶體的特性為從上而下儲存且具有後進先出的特性，最後被push進堆疊的資料會最先被pop取出 。
+2.堆疊記憶體的特性為從上而下儲存且具有先進後出的特性，最後被push進堆疊的資料會最先被pop取出 。
