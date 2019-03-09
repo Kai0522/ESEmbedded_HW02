@@ -51,8 +51,73 @@ This is the hw02 sample. Please follow the steps below.
 
 --------------------
 
-- [x] **If you volunteer to give the presentation next week, check this.**
+ [x] **If you volunteer to give the presentation next week, check this.**
 
 --------------------
 
-Please take your note here.
+HW02 
+===
+## 1. 實驗題目
+改寫程式以比較push指令中暫存器順序造成的影響。
+## 2. 實驗步驟
+1. 先將資料夾 gnu-mcu-eclipse-qemu 完整複製到 ESEmbedded_HW02 資料夾中
+
+2. 設計測試程式 main.s ，從 _start 開始後依序執行(a)照順序進行push進stack，並使用pop一次全部取回暫存器(b)照順序進行push進stack，並使用pop逐一取回暫存器(c)相反戰存器順序進行push進stack，並使用pop以相反的順序一次全部取回暫存器。
+
+
+main.s:
+
+```assembly
+_start:
+    mov    r0,#001
+    mov    r1,#002
+    mov    r2,#003
+    
+    push   {r0,r1,r2} //pushing forward
+    pop    {r3,r4,r5} //poping forward
+
+    mov    r3,0
+    mov    r4,0
+    mov    r5,0
+
+    push   {r0,r1,r2}
+    pop    {r3}       //testing pop 
+    pop    {r4}
+    pop    {r5}
+
+    push   {r2,r1,r0} //pushing backward
+    pop    {r5,r4,r3} //poping backward
+
+	//
+	//branch w/o link
+	//
+	b	label01
+
+label01:
+	nop
+
+	//
+	//branch w/ link
+	//
+	bl	sleep
+
+sleep:
+	nop
+	b	.	.
+```
+
+4. 將 main.s 編譯，此時assembler會出現下圖之warring，顯示反向進行push與pop的順序沒有照著遞增順序。  
+![](https://github.com/Kai0522/ESEmbedded_HW02/blob/master/img/warning.png)  
+接著取得其反組譯碼如下：  
+![](https://github.com/Kai0522/ESEmbedded_HW02/blob/master/img/disassembly.png)  
+此時可以看到原先反向push與pop的指令接被assembler自動轉換為遞增順序，由此可以確定使用push與pop指令並無法顛倒順序反向送入與取出stack。  
+5.以下再進行push順序的比較，如果照著順向的順序送入stack時，結果將會是由右至左的順序將暫存器由上至下的堆入堆疊記憶體。  
+![](https://github.com/Kai0522/ESEmbedded_HW02/blob/master/img/pushing_stack.png)
+![](https://github.com/Kai0522/ESEmbedded_HW02/blob/master/img/stack.png)  
+6.再將資料一次進行pop可以看到，assembler自動將push的資料順序與pop的順序對應。  
+![](https://github.com/Kai0522/ESEmbedded_HW02/blob/master/img/poping_stack.png)
+7.最後將資料重新照順序push上stack，再逐一使用pop指令將資料取下，如下圖，可以看到最後被push的資料會最先被pop出暫存器，所以與上圖比較一次pop多個暫存器時順序為由左至右。
+![](https://github.com/Kai0522/ESEmbedded_HW02/blob/master/img/poping_one.png)
+## 3. 結果與討論
+1.無法將暫存器以反向順序送入stack，Assembler會自動調整順序，並由右至左進行push。  
+2.堆疊記憶體的特性為從上而下儲存且具有後進先出的特性，最後被push進堆疊的資料會最先被pop取出 。
